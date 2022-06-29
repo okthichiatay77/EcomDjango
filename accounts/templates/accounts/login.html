@@ -1,0 +1,28 @@
+{% extends 'base_accounts.html' %}
+
+{% block content %}
+<section id="form"><!--form-->
+		<div class="container">
+			<div class="row">
+                <div class="col-sm-6">
+                    <img src="/media/sp_images/istockphoto-1342849839-170667a.jpg" width="500px" height="500px">
+                </div>
+				<div class="col-sm-4 col-sm-offset-1">
+					<div class="login-form"><!--login form-->
+						<h2>Login to your account</h2>
+						<form method="post">
+                            {% csrf_token %}
+							<input name="username" type="text" placeholder="Username" />
+                            <input name="password" type="password" placeholder="Password" />
+							<span>
+								<input type="checkbox" class="checkbox">
+								Keep me signed in
+							</span>
+							<button type="submit" class="btn btn-default">Login</button>
+						</form>
+					</div><!--/login form-->
+				</div>
+			</div>
+		</div>
+	</section><!--/form-->
+{% endblock %}
