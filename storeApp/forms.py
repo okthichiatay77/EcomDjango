@@ -7,3 +7,11 @@ class SanPhanForm(forms.ModelForm):
 
         model = models.SanPham
         fields = '__all__'
+
+
+class CartForm(forms.ModelForm):
+
+    class Meta:
+
+        model = models.Cart
+        fields = '__all__'

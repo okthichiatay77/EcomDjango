@@ -1,11 +1,27 @@
-from django.shortcuts import render
-from .models import SanPham, Shoe, Blog
+from django.shortcuts import render, redirect
+from django.urls import reverse
+from .models import SanPham, Shoe, Blog, Cart
+from .forms import CartForm
 # Create your views here.
 def index(request):
     context = {}
     cl = SanPham.objects.all()
 
     context['clothes'] = cl
+
+    if request.method == 'POST':
+        item_id = request.POST['item_id']
+        item_name = request.POST['item_name']
+        item_image = request.POST['item_image']
+        item_price = request.POST['item_price']
+        item_quantity = request.POST['item_quantity']
+        item_total = request.POST['item_total']
+
+        cart = Cart.objects.create(item_id=item_id,item_name=item_name, item_image=item_image, item_price=item_price,
+                                   item_quantity=item_quantity, item_total=item_total, user=request.user)
+        cart.save()
+        return redirect(reverse('store:index'))
+
     return render(request, 'index.html', context)
 
 def list_woman(request):
@@ -62,7 +78,8 @@ def check_out(request):
     return render(request, 'checkout.html')
 
 def cart(request):
-    return render(request, 'store/cart.html')
+    carts = Cart.objects.filter(user=request.user)
+    return render(request, 'store/cart.html', {'carts': carts})
 
 def contact_us(request):
     return render(request, 'contact-us.html')

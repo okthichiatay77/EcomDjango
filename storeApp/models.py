@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 from django.utils.translation import gettext_lazy as _
 # Create your models here.
 availabilityList = [
@@ -116,35 +117,6 @@ class Tui(models.Model):
     def __str__(self):
         return self.bag_name
 
-kind_of_interiors = [
-    ('Không gian phòng khách', 'Không gian phòng khách'),
-    ('Đồ trang trí', 'Đồ trang trí'),
-    ('Không gian phòng ngủ', 'Không gian phòng ngủ'),
-    ('Không gian phòng ăn', 'Không gian phòng ăn'),
-]
-
-product_interiors = [
-    ('sofa', 'Sofa'),
-    ('bàn', 'Bàn'),
-    ('ghế', 'Ghế'),
-    ('tủ', 'Tủ'),
-    ('kệ', 'Kệ'),
-]
-
-class NoiThat(models.Model):
-    noithat_image = models.ImageField(upload_to='noithat_images')
-    name = models.CharField(max_length=100)
-    material = models.CharField(max_length=100)
-    price = models.IntegerField()
-    kind_of_interior = models.CharField(choices=kind_of_interiors, max_length=100)
-    product_interior = models.CharField(choices=product_interiors, max_length=100)
-    size = models.CharField(max_length=100)
-    availability = models.CharField(_('availability'), choices=availabilityList, max_length=20)
-    condition = models.CharField(_('condition'), choices=conditionList, max_length=20)
-
-    def __str__(self):
-        return self.name
-
 
 
 class Blog(models.Model):
@@ -157,3 +129,18 @@ class Blog(models.Model):
 
     def __str__(self):
         return self.title
+
+
+
+class Cart(models.Model):
+    item_id = models.IntegerField()
+    item_name = models.CharField(max_length=200)
+    item_image = models.ImageField(upload_to='cart_images')
+    item_price = models.IntegerField()
+    item_quantity = models.IntegerField()
+    item_total = models.IntegerField()
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_cart')
+
+    def __str__(self):
+        return self.item_name
+
