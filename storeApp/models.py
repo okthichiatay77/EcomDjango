@@ -39,6 +39,7 @@ type_product = [
 class SanPham(models.Model):
     sp_image = models.ImageField(_('image'), upload_to='sp_images')
     name = models.CharField(_('name'), max_length=100)
+    detail = models.TextField(blank=True)
     price = models.IntegerField(_("price"))
     availability = models.CharField(_('availability'), choices=availabilityList, max_length=20)
     condition = models.CharField(_('condition'), choices=conditionList, max_length=20)
@@ -76,6 +77,7 @@ kind_shoe_list = [
 class Shoe(models.Model):
     shoe_image = models.ImageField(_('shoe image'), upload_to='shoe_images')
     shoe_name = models.CharField(_('shoe name'), max_length=200)
+    shoe_detail = models.TextField(blank=True)
     shoe_company = models.CharField(_('shoe company'), choices=hang_san_xuat, max_length=50)
     price = models.IntegerField(_('price'))
     size = models.IntegerField(_('size of shoes'))
@@ -86,6 +88,7 @@ class Shoe(models.Model):
 
     def __str__(self):
         return self.shoe_name
+
 
 
 brandBagList = [
@@ -131,16 +134,29 @@ class Blog(models.Model):
         return self.title
 
 
-
-class Cart(models.Model):
-    item_id = models.IntegerField()
-    item_name = models.CharField(max_length=200)
-    item_image = models.ImageField(upload_to='cart_images')
-    item_price = models.IntegerField()
-    item_quantity = models.IntegerField()
-    item_total = models.IntegerField()
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_cart')
+class CartEshop(models.Model):
+    i_id = models.IntegerField()
+    i_name_object = models.CharField(max_length=200)
+    i_name = models.CharField(max_length=200)
+    i_image = models.ImageField(upload_to='cart_images')
+    i_price = models.IntegerField()
+    i_quantity = models.IntegerField()
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.item_name
+        return self.i_name
 
+    def get_total_price(self):
+        x = int(self.i_price) * int(self.i_quantity)
+        return x
+
+
+class CommentSanPham(models.Model):
+    sanpham = models.ForeignKey(SanPham, on_delete=models.CASCADE, related_name='comment_sp')
+    author = models.CharField(max_length=200)
+    email_author = models.EmailField()
+    content = models.TextField()
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_comment')
+
+    def __str__(self):
+        return self.user.username

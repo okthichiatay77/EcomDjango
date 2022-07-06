@@ -8,10 +8,9 @@ class SanPhanForm(forms.ModelForm):
         model = models.SanPham
         fields = '__all__'
 
-
 class CartForm(forms.ModelForm):
 
     class Meta:
 
-        model = models.Cart
+        model = models.CartEshop
         fields = '__all__'

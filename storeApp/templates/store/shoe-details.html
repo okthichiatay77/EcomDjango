@@ -11,7 +11,7 @@
         <div class="product-details"><!--product-details-->
             <div class="col-sm-5">
                 <div class="view-product">
-                    <img src="/media/{{ sp.sp_image }}" alt="" />
+                    <img src="/media/{{ shoe.shoe_image }}" alt="" />
                     <h3>ZOOM</h3>
                 </div>
                 <div id="similar-product" class="carousel slide" data-ride="carousel">
@@ -49,11 +49,11 @@
             <div class="col-sm-7">
                 <div class="product-information"><!--/product-information-->
                     <img src="/images/product-details/new.jpg" class="newarrival" alt="" />
-                    <h2>{{ sp.name }}</h2>
+                    <h2>{{ shoe.shoe_name }}</h2>
                     <p>Web ID: 1089772</p>
                     <img src="/images/product-details/rating.png" alt="" />
                     <span>
-                        <span>{{ sp.price|filter_price }} đ</span>
+                        <span>{{ shoe.price|filter_price }} đ</span>
                         <label>Quantity:</label>
                         <input type="text" value="3" />
                         <button type="button" class="btn btn-fefault cart">
@@ -61,9 +61,11 @@
                             Add to cart
                         </button>
                     </span>
-                    <p><b>Availability:</b> {{ sp.availability }}</p>
-                    <p><b>Condition:</b> {{ sp.condition }}</p>
-                    <p><b>Brand:</b> {{ sp.brand }}</p>
+                    <p><b>Tình trạng:</b> {{ shoe.availability }}</p>
+                    <p><b>Chất lượng:</b> {{ shoe.condition }}</p>
+                    <p><b>Nhãn hiệu:</b> {{ shoe.shoe_company }}</p>
+                    <p><b>Dành cho:</b> {{ shoe.kind_of_shoe }}</p>
+                    <p><b>Cỡ giày:</b> {{ shoe.size }}</p>
                     <a href=""><img src="/images/product-details/share.png" class="share img-responsive" alt="" /></a>
                 </div><!--/product-information-->
             </div>
@@ -80,7 +82,7 @@
             </div>
             <div class="tab-content">
                 <div class="tab-pane fade" id="details" >
-                    <p>{{ sp.detail|linebreaksbr }}</p>
+                    <p>{{ shoe.shoe_detail|linebreaksbr }}</p>
                 </div>
 
                 <div class="tab-pane fade" id="companyprofile" >

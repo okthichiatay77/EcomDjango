@@ -1,5 +1,5 @@
 {% extends 'base_accounts.html' %}
-
+{% load price_filter %}
 {% block content %}
 	<section id="cart_items">
 		<div class="container">
@@ -22,37 +22,37 @@
 						</tr>
 					</thead>
 					<tbody>
-                        {% if carts %}
-                            {% for c in carts %}
-                                <tr>
-                                    <td class="cart_product">
-                                        <a href=""><img src="/media/{{ c.item_image }}" width="50px" height="50px" alt=""></a>
-                                    </td>
-                                    <td class="cart_description">
-                                        <h4><a href="">{{ c.item_name }}</a></h4>
-                                        <p>Web ID: 1089772</p>
-                                    </td>
-                                    <td class="cart_price">
-                                        <p>$59</p>
-                                    </td>
-                                    <td class="cart_quantity">
-                                        <div class="cart_quantity_button">
-                                            <a class="cart_quantity_up" href=""> + </a>
-                                            <input class="cart_quantity_input" type="text" name="quantity" value="1" autocomplete="off" size="2">
-                                            <a class="cart_quantity_down" href=""> - </a>
-                                        </div>
-                                    </td>
-                                    <td class="cart_total">
-                                        <p class="cart_total_price">$59</p>
-                                    </td>
-                                    <td class="cart_delete">
-                                        <a class="cart_quantity_delete" href=""><i class="fa fa-times"></i></a>
-                                    </td>
-                                </tr>
-                            {% endfor %}
-                        {% else %}
+                        {% for c in carts %}
+                            <tr>
+                                <td class="cart_product">
+                                    <a href=""><img src="/media/{{ c.i_image }}" width="50px" height="50px" alt=""></a>
+                                </td>
+                                <td class="cart_description">
+                                    <h4><a href="">{{ c.i_name }}</a></h4>
+                                    <p>Web ID: 1089772</p>
+                                </td>
+                                <td class="cart_price">
+                                    <p>{{ c.i_price|filter_price }} đ</p>
+                                </td>
+                                <td class="cart_quantity">
+                                    <div class="cart_quantity_button">
+                                        <form method="post">
+                                            <input type="hidden" name="get_id" value="{{ c.id }}">
+                                            {% csrf_token %}
+                                            <input class="cart_quantity_input" type="number" name="i_quantity" autocomplete="on">
+                                            <input type="submit" value="OK">
+                                        </form>
+                                    </div>
+                                </td>
 
-                        {% endif %}
+                                <td class="cart_total">
+                                    <p class="cart_total_price">{{ c.get_total_price|filter_price }} đ</p>
+                                </td>
+                                <td class="cart_delete">
+                                    <a class="cart_quantity_delete" href=""><i class="fa fa-times"></i></a>
+                                </td>
+                            </tr>
+                        {% endfor %}
 					</tbody>
 				</table>
 			</div>

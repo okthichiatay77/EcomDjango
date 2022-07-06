@@ -1,7 +1,8 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
 from django.urls import reverse
-from .models import SanPham, Shoe, Blog, Cart
-from .forms import CartForm
+from .models import *
+from .forms import *
 # Create your views here.
 def index(request):
     context = {}
@@ -10,15 +11,16 @@ def index(request):
     context['clothes'] = cl
 
     if request.method == 'POST':
-        item_id = request.POST['item_id']
-        item_name = request.POST['item_name']
-        item_image = request.POST['item_image']
-        item_price = request.POST['item_price']
-        item_quantity = request.POST['item_quantity']
-        item_total = request.POST['item_total']
+        i_name = request.POST['item_name']
+        i_id = request.POST['item_id']
+        i_image = request.POST['item_image']
+        i_price = request.POST['item_price']
+        i_quantity = request.POST['item_quantity']
+        i_name_object = request.POST['item_object']
 
-        cart = Cart.objects.create(item_id=item_id,item_name=item_name, item_image=item_image, item_price=item_price,
-                                   item_quantity=item_quantity, item_total=item_total, user=request.user)
+        cart = CartEshop.objects.create(i_name=i_name, i_id=i_id, i_image=i_image, i_price=i_price,
+                                        i_quantity=i_quantity, i_name_object=i_name_object,
+                                        user=request.user)
         cart.save()
         return redirect(reverse('store:index'))
 
@@ -40,6 +42,19 @@ def list_shoes(request):
     context = {}
     list_shoe = Shoe.objects.all()
     context['shoes'] = list_shoe
+    if request.method == 'POST':
+        name = request.POST['shoe_name']
+        price = request.POST['price']
+        quantity = request.POST['quantity']
+        id = request.POST['shoe_id']
+        shoe_image = request.POST['shoe_image']
+
+        add_to_cart = CartEshop.objects.create(i_name=name, i_image=shoe_image,
+                                               i_quantity=quantity, i_price=price, i_id=id,
+                                               user=request.user)
+        add_to_cart.save()
+        return redirect(reverse('/'))
+
     return render(request, 'store/list_shoes.html', context)
 
 def list_filter_shoes(request, kind):
@@ -55,8 +70,7 @@ def product_detail(request, pk):
 
 def shoe_detail(request, pk):
     shoes = Shoe.objects.get(pk=pk)
-
-    return render(request, 'shoe_detail.html', {'shoe':shoes})
+    return render(request, 'store/shoe-details.html', {'shoe':shoes})
 
 def blog(request):
     context = {}
@@ -68,6 +82,23 @@ def blog_single(request, pk):
     blog = Blog.objects.get(pk=pk)
     return render(request, 'blog-single.html', {'blog':blog})
 
+@login_required
+def cart(request):
+    carts = CartEshop.objects.filter(user=request.user)
+
+    if request.method == 'POST':
+        id = int(request.POST['get_id'])
+        obj = get_object_or_404(CartEshop, id=id)
+        form = CartForm(request.POST or None, instance=obj)
+        if form.is_valid():
+            form.save()
+            return redirect('/')
+    else:
+        form = CartForm()
+
+
+    return render(request, 'store/cart.html', {'carts':carts, 'form':form})
+
 def shop(request):
     return render(request, 'shop.html')
 
@@ -76,10 +107,6 @@ def detail(request):
 
 def check_out(request):
     return render(request, 'checkout.html')
-
-def cart(request):
-    carts = Cart.objects.filter(user=request.user)
-    return render(request, 'store/cart.html', {'carts': carts})
 
 def contact_us(request):
     return render(request, 'contact-us.html')

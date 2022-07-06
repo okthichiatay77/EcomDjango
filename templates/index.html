@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load price_filter %}
 
 {% block title %}
     Home | E-Shopper
@@ -15,13 +16,14 @@
 								<div class="single-products">
 									<div class="productinfo text-center">
 										<img src="/media/{{ cl.sp_image }}" width="200px" height="200px" alt="" />
-										<h2>{{ cl.price }} đ</h2>
+										<h2>{{ cl.price|filter_price }} đ</h2>
 										<p>{{ cl.name }}</p>
+                                        <p>{{ cl.db_table.name }}</p>
 										<a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</a>
 									</div>
 									<div class="product-overlay">
 										<div class="overlay-content">
-											<h2>{{ cl.price }} đ</h2>
+											<h2>{{ cl.price|filter_price }} đ</h2>
 											<p>{{ cl.name }}</p>
                                             <form method="post">
                                                 {% csrf_token %}
@@ -30,7 +32,7 @@
                                                 <input type="hidden" name="item_image" value="{{ cl.sp_image }}">
                                                 <input type="hidden" name="item_price" value="{{ cl.price }}">
                                                 <input type="hidden" name="item_quantity" value="1">
-                                                <input type="hidden" name="item_total" value="{{ cl.price }}">
+                                                <input type="hidden" name="item_object" value="1">
 
                                                 <button type="submit" class="btn btn-default add-to-cart">Add to cart</button>
                                             </form>
