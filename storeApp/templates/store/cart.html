@@ -39,7 +39,7 @@
                                         <form method="post">
                                             <input type="hidden" name="get_id" value="{{ c.id }}">
                                             {% csrf_token %}
-                                            <input class="cart_quantity_input" type="number" name="i_quantity" autocomplete="on">
+                                            {{ form.i_quantity }}
                                             <input type="submit" value="OK">
                                         </form>
                                     </div>

@@ -20,7 +20,7 @@ def login_view(request):
 
 
 def logout_view(request):
-    login_view(request)
+    logout(request)
     return redirect(reverse('store:index'))
 
 def signup_view(request):
